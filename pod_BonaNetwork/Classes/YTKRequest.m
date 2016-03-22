@@ -224,7 +224,7 @@
     if (_cacheJson) {
         return _cacheJson;
     } else {
-        return [super responseJSONObject];
+        return [super responseString];
     }
 }
 
@@ -232,7 +232,7 @@
 
 - (void)requestCompleteFilter {
     [super requestCompleteFilter];
-    [self saveJsonResponseToCacheFile:[super responseJSONObject]];
+    [self saveJsonResponseToCacheFile:[super responseString]];
 }
 
 // 手动将其他请求的JsonResponse写入该请求的缓存
