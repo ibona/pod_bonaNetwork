@@ -23,13 +23,13 @@ Pod::Spec.new do |s|
   # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
   s.license          = 'MIT'
   s.author           = { "ztq" => "zhangtongqing@ibona.cn" }
-  s.source           = { :git => "https://github.com/bonaiOS/pod_bonaNetwork.git", :tag => s.version.to_s }
+  s.source           = { :git => "https://github.com/bona/pod_bonaNetwork.git", :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.platform     = :ios, '7.0'
   s.requires_arc = true
 
-  s.source_files = 'pod_BonaNetworkClasses/**/*'
+  s.source_files = 'pod_BonaNetwork/Classes/**/*'
   s.resource_bundles = {
     'pod_bonaNetwork' => ['Assets/*.png']
   }
