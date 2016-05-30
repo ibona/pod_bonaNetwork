@@ -38,6 +38,7 @@
 
 @property (strong, nonatomic) NSString *baseUrl;
 @property (strong, nonatomic) NSString *cdnUrl;
+@property (strong,nonatomic) NSString *imageUrl;
 @property (strong, nonatomic, readonly) NSArray *urlFilters;
 @property (strong, nonatomic, readonly) NSArray *cacheDirPathFilters;
 @property (strong, nonatomic) AFSecurityPolicy *securityPolicy;
