@@ -106,7 +106,6 @@ typedef void(^YTKRequestCompletionBlock)(__kindof YTKBaseRequest *request);
 /// block回调
 - (void)startWithCompletionBlockWithSuccess:(YTKRequestCompletionBlock)success
                                     failure:(YTKRequestCompletionBlock)failure;
-
 - (void)setCompletionBlockWithSuccess:(YTKRequestCompletionBlock)success
                               failure:(YTKRequestCompletionBlock)failure;
 

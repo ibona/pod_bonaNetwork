@@ -24,6 +24,8 @@
 #import "YTKBaseRequest.h"
 #import "YTKNetworkAgent.h"
 #import "YTKNetworkPrivate.h"
+#import "YTKNetworkConfig.h"
+#import <CommonCrypto/CommonDigest.h>
 
 @implementation YTKBaseRequest
 
@@ -53,7 +55,6 @@
 - (id)requestArgument {
     return nil;
 }
-
 - (id)cacheFileNameFilterForRequestArgument:(id)argument {
     return argument;
 }
@@ -110,7 +111,10 @@
 /// append self to request queue
 - (void)start {
     [self toggleAccessoriesWillStartCallBack];
-    [[YTKNetworkAgent sharedInstance] addRequest:self];
+    YTKNetworkConfig *config = [YTKNetworkConfig sharedInstance];
+    NSDate * serverDate = [[NSDate date] dateByAddingTimeInterval:config.time_difference];
+    NSDictionary * param = [self getSecurityParam:self.requestArgument Timestamp:[NSString stringWithFormat:@"%d",[serverDate timeIntervalSince1970]]];
+    [[YTKNetworkAgent sharedInstance] addRequest:self Param:param];
 }
 
 /// remove self from request queue
@@ -129,8 +133,8 @@
                                     failure:(YTKRequestCompletionBlock)failure {
     [self setCompletionBlockWithSuccess:success failure:failure];
     [self start];
+    
 }
-
 - (void)setCompletionBlockWithSuccess:(YTKRequestCompletionBlock)success
                               failure:(YTKRequestCompletionBlock)failure {
     self.successCompletionBlock = success;
@@ -171,5 +175,61 @@
     }
     [self.requestAccessories addObject:accessory];
 }
-
+/**
+ *  得到新的签名过的参数
+ *
+ *  @param parm 以前的参数
+ *
+ *  @return 新的参数
+ */
+-(NSMutableDictionary *)getSecurityParam:(NSDictionary *)parm Timestamp:(NSString *)timestamp
+{
+    YTKNetworkConfig * config = [YTKNetworkConfig sharedInstance];
+    NSMutableDictionary * dic = [[NSMutableDictionary alloc] initWithDictionary:parm];
+    [dic setObject:timestamp forKey:@"time"];
+    [dic setObject:config.device_token forKey:@"unique_id"];
+    [dic setObject:@"1" forKey:@"device_type"];
+    [dic setObject:@"a5aa2b8e53cea305ee080b466bdf1828" forKey:@"access_key"];
+    NSMutableArray * temps = [NSMutableArray arrayWithObjects:config.device_token,@"1",timestamp,@"24decffe391d6b206d5f800d3c189f4f", nil];
+    [temps addObjectsFromArray:[parm allValues]];
+    NSString * sign = [self getSignStr:temps];
+    [dic setObject:[[self md5:sign] uppercaseString] forKey:@"sign"];
+    return dic;
+}
+/**
+ *  得到签名字符串
+ *
+ *  @param param 所有参数数组
+ *
+ *  @return 签名
+ */
+-(NSString *)getSignStr:(NSMutableArray *)param
+{
+    NSString * result = @"";
+    param = [param sortedArrayUsingSelector:@selector(compare:)];
+    for (int i =0; i<param.count; i++) {
+        result = [result stringByAppendingString:[param objectAtIndex:i]];
+    }
+    return result;
+}
+/**
+ *  MD5 加密
+ *
+ *  @param str <#str description#>
+ *
+ *  @return <#return value description#>
+ */
+- (NSString *)md5:(NSString *)str
+{
+    const char *cStr = [str UTF8String];
+    unsigned char result[16];
+    CC_MD5(cStr, strlen(cStr), result); // This is the md5 call
+    return [NSString stringWithFormat:
+            @"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
+            result[0], result[1], result[2], result[3],
+            result[4], result[5], result[6], result[7],
+            result[8], result[9], result[10], result[11],
+            result[12], result[13], result[14], result[15]
+            ]; 
+}
 @end
