@@ -81,10 +81,10 @@
     return [NSString stringWithFormat:@"%@%@", baseUrl, detailUrl];
 }
 
-- (void)addRequest:(YTKBaseRequest *)request {
+- (void)addRequest:(YTKBaseRequest *)request Param:(NSDictionary *)dic{
     YTKRequestMethod method = [request requestMethod];
     NSString *url = [self buildRequestUrl:request];
-    id param = request.requestArgument;
+    id param = dic;
     AFConstructingBlock constructingBlock = [request constructingBodyBlock];
 
     if (request.requestSerializerType == YTKRequestSerializerTypeHTTP) {

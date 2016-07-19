@@ -29,7 +29,7 @@
 
 + (YTKNetworkAgent *)sharedInstance;
 
-- (void)addRequest:(YTKBaseRequest *)request;
+- (void)addRequest:(YTKBaseRequest *)request Param:(NSDictionary *)dic;
 
 - (void)cancelRequest:(YTKBaseRequest *)request;
 
