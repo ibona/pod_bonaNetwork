@@ -113,7 +113,7 @@
     [self toggleAccessoriesWillStartCallBack];
     YTKNetworkConfig *config = [YTKNetworkConfig sharedInstance];
     NSDate * serverDate = [[NSDate date] dateByAddingTimeInterval:config.time_difference];
-    NSDictionary * param = [self getSecurityParam:self.requestArgument Timestamp:[NSString stringWithFormat:@"%d",[serverDate timeIntervalSince1970]]];
+    NSDictionary * param = [self getSecurityParam:self.requestArgument Timestamp:[NSString stringWithFormat:@"%ld",(long)[serverDate timeIntervalSince1970]]];
     [[YTKNetworkAgent sharedInstance] addRequest:self Param:param];
 }
 
