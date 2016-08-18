@@ -234,6 +234,12 @@
     if (request) {
         BOOL succeed = [self checkResult:request];
         if (succeed) {
+            
+            //所有接口请求后的统一处理
+            if (_config.globalHandleBlock) {
+                _config.globalHandleBlock(request);
+            }
+                     
             [request toggleAccessoriesWillStopCallBack];
             [request requestCompleteFilter];
             if (request.delegate != nil) {

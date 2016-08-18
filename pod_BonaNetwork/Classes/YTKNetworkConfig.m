@@ -63,4 +63,10 @@
     return [_cacheDirPathFilters copy];
 }
 
+
+//所有接口请求后的统一处理 在YTKChainRequestAgent的handleRequestResult方法中被调用
+- (void)setCompletionGlobalHandleBlock:(YTKRequestCompletionGlobalHandleBlock)block{
+    self.globalHandleBlock = block;
+}
+
 @end

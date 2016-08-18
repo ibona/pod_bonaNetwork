@@ -32,6 +32,9 @@
 - (NSString *)filterCacheDirPath:(NSString *)originPath withRequest:(YTKBaseRequest *)request;
 @end
 
+//所有接口请求后的统一处理
+typedef void(^YTKRequestCompletionGlobalHandleBlock)(__kindof YTKBaseRequest *request);
+
 @interface YTKNetworkConfig : NSObject
 
 + (YTKNetworkConfig *)sharedInstance;
@@ -45,7 +48,10 @@
 @property (strong, nonatomic, readonly) NSArray *cacheDirPathFilters;
 @property (strong, nonatomic) AFSecurityPolicy *securityPolicy;
 
+@property (nonatomic, copy) YTKRequestCompletionGlobalHandleBlock globalHandleBlock;
+
 - (void)addUrlFilter:(id<YTKUrlFilterProtocol>)filter;
 - (void)addCacheDirPathFilter:(id <YTKCacheDirPathFilterProtocol>)filter;
+- (void)setCompletionGlobalHandleBlock:(YTKRequestCompletionGlobalHandleBlock)block;
 
 @end
