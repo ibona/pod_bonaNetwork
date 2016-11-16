@@ -7,7 +7,7 @@
 #
 
 Pod::Spec.new do |s|
-  s.name             = "pod_bonaNetwork"
+  s.name             = "pod_BonaNetwork"
   s.version          = "0.1.0"
   s.summary          = "A short description of pod_bonaNetwork."
 
