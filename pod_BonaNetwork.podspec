@@ -7,8 +7,8 @@
 #
 
 Pod::Spec.new do |s|
-  s.name             = "pod_BonaNetwork"
-  s.version          = "0.1.0"
+  s.name             = "pod_bonaNetwork"
+  s.version          = "0.2.0"
   s.summary          = "A short description of pod_bonaNetwork."
 
 # This description is used to generate tags and improve search results.
