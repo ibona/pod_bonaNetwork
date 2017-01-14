@@ -7,7 +7,7 @@
 #
 
 Pod::Spec.new do |s|
-  s.name             = "pod_bonaNetwork"
+  s.name             = "pod_BonaNetwork"
   s.version          = "0.2.0"
   s.summary          = "A short description of pod_bonaNetwork."
 
@@ -31,7 +31,7 @@ Pod::Spec.new do |s|
 
   s.source_files = 'pod_BonaNetwork/Classes/**/*'
   s.resource_bundles = {
-    'pod_bonaNetwork' => ['Assets/*.png']
+    'pod_BonaNetwork' => ['Assets/*.png']
   }
 
   # s.public_header_files = 'Classes/**/*.h'
