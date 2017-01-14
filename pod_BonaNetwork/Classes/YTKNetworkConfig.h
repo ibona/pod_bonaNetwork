@@ -42,6 +42,7 @@ typedef void(^YTKRequestCompletionGlobalHandleBlock)(__kindof YTKBaseRequest *re
 @property (strong, nonatomic) NSString *baseUrl;
 @property (strong, nonatomic) NSString *cdnUrl;
 @property (strong,nonatomic) NSString *imageUrl;
+@property (strong,nonatomic) NSString *cloudDiskImageUrl;
 @property (strong,nonatomic) NSString *device_token;//设备唯一标识
 @property (assign,nonatomic) NSTimeInterval  time_difference;//时间差
 @property (strong, nonatomic, readonly) NSArray *urlFilters;
