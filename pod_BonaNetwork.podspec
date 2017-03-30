@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "pod_BonaNetwork"
-  s.version          = "0.2.0"
+  s.version          = "2.0.0"
   s.summary          = "A short description of pod_bonaNetwork."
 
 # This description is used to generate tags and improve search results.
@@ -36,5 +36,5 @@ Pod::Spec.new do |s|
 
   # s.public_header_files = 'Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-   s.dependency 'AFNetworking', '~> 2.6.3'
+   s.dependency 'AFNetworking', '~> 3.1.0'
 end
