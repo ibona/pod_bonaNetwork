@@ -1,5 +1,5 @@
 //
-//  YTKBatchRequestAgent.m
+//  YTKNetwork.h
 //
 //  Copyright (c) 2012-2016 YTKNetwork https://github.com/yuantiku
 //
@@ -21,44 +21,36 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-#import "YTKBatchRequestAgent.h"
-#import "YTKBatchRequest.h"
+#import <Foundation/Foundation.h>
 
-@interface YTKBatchRequestAgent()
+#ifndef _YTKNETWORK_
+    #define _YTKNETWORK_
 
-@property (strong, nonatomic) NSMutableArray<YTKBatchRequest *> *requestArray;
+#if __has_include(<YTKNetwork/YTKNetwork.h>)
 
-@end
+    FOUNDATION_EXPORT double YTKNetworkVersionNumber;
+    FOUNDATION_EXPORT const unsigned char YTKNetworkVersionString[];
 
-@implementation YTKBatchRequestAgent
+    #import <YTKNetwork/YTKRequest.h>
+    #import <YTKNetwork/YTKBaseRequest.h>
+    #import <YTKNetwork/YTKNetworkAgent.h>
+    #import <YTKNetwork/YTKBatchRequest.h>
+    #import <YTKNetwork/YTKBatchRequestAgent.h>
+    #import <YTKNetwork/YTKChainRequest.h>
+    #import <YTKNetwork/YTKChainRequestAgent.h>
+    #import <YTKNetwork/YTKNetworkConfig.h>
 
-+ (YTKBatchRequestAgent *)sharedAgent {
-    static id sharedInstance = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedInstance = [[self alloc] init];
-    });
-    return sharedInstance;
-}
+#else
 
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        _requestArray = [NSMutableArray array];
-    }
-    return self;
-}
+    #import "YTKRequest.h"
+    #import "YTKBaseRequest.h"
+    #import "YTKNetworkAgent.h"
+    #import "YTKBatchRequest.h"
+    #import "YTKBatchRequestAgent.h"
+    #import "YTKChainRequest.h"
+    #import "YTKChainRequestAgent.h"
+    #import "YTKNetworkConfig.h"
 
-- (void)addBatchRequest:(YTKBatchRequest *)request {
-    @synchronized(self) {
-        [_requestArray addObject:request];
-    }
-}
+#endif /* __has_include */
 
-- (void)removeBatchRequest:(YTKBatchRequest *)request {
-    @synchronized(self) {
-        [_requestArray removeObject:request];
-    }
-}
-
-@end
+#endif /* _YTKNETWORK_ */

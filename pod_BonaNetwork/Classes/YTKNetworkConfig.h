@@ -1,7 +1,7 @@
 //
 //  YTKNetworkConfig.h
 //
-//  Copyright (c) 2012-2014 YTKNetwork https://github.com/yuantiku
+//  Copyright (c) 2012-2016 YTKNetwork https://github.com/yuantiku
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,37 +22,86 @@
 //  THE SOFTWARE.
 
 #import <Foundation/Foundation.h>
-#import "YTKBaseRequest.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
+@class YTKBaseRequest;
+@class AFSecurityPolicy;
+
+///  YTKUrlFilterProtocol can be used to append common parameters to requests before sending them.
 @protocol YTKUrlFilterProtocol <NSObject>
+///  Preprocess request URL before actually sending them.
+///
+///  @param originUrl request's origin URL, which is returned by `requestUrl`
+///  @param request   request itself
+///
+///  @return A new url which will be used as a new `requestUrl`
 - (NSString *)filterUrl:(NSString *)originUrl withRequest:(YTKBaseRequest *)request;
 @end
 
+///  YTKCacheDirPathFilterProtocol can be used to append common path components when caching response results
 @protocol YTKCacheDirPathFilterProtocol <NSObject>
+///  Preprocess cache path before actually saving them.
+///
+///  @param originPath original base cache path, which is generated in `YTKRequest` class.
+///  @param request    request itself
+///
+///  @return A new path which will be used as base path when caching.
 - (NSString *)filterCacheDirPath:(NSString *)originPath withRequest:(YTKBaseRequest *)request;
 @end
+
+///  YTKNetworkConfig stored global network-related configurations, which will be used in `YTKNetworkAgent`
+///  to form and filter requests, as well as caching response.
 
 //所有接口请求后的统一处理
 typedef void(^YTKRequestCompletionGlobalHandleBlock)(__kindof YTKBaseRequest *request);
 
 @interface YTKNetworkConfig : NSObject
 
-+ (YTKNetworkConfig *)sharedInstance;
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
 
-@property (strong, nonatomic) NSString *baseUrl;
-@property (strong, nonatomic) NSString *cdnUrl;
+///  Return a shared config object.
++ (YTKNetworkConfig *)sharedConfig;
+
+///  Request base URL, such as "http://www.yuantiku.com". Default is empty string.
+@property (nonatomic, strong) NSString *baseUrl;
+///  Request CDN URL. Default is empty string.
+@property (nonatomic, strong) NSString *cdnUrl;
+/// 设备唯一标识
+@property (strong,nonatomic) NSString *device_token;
+///  时间差
+@property (assign,nonatomic) NSTimeInterval  time_difference;
+///  网络图片路径
 @property (strong,nonatomic) NSString *imageUrl;
+///  七牛图片路径
 @property (strong,nonatomic) NSString *cloudDiskImageUrl;
-@property (strong,nonatomic) NSString *device_token;//设备唯一标识
-@property (assign,nonatomic) NSTimeInterval  time_difference;//时间差
-@property (strong, nonatomic, readonly) NSArray *urlFilters;
-@property (strong, nonatomic, readonly) NSArray *cacheDirPathFilters;
-@property (strong, nonatomic) AFSecurityPolicy *securityPolicy;
+
+///  URL filters. See also `YTKUrlFilterProtocol`.
+@property (nonatomic, strong, readonly) NSArray<id<YTKUrlFilterProtocol>> *urlFilters;
+///  Cache path filters. See also `YTKCacheDirPathFilterProtocol`.
+@property (nonatomic, strong, readonly) NSArray<id<YTKCacheDirPathFilterProtocol>> *cacheDirPathFilters;
+///  Security policy will be used by AFNetworking. See also `AFSecurityPolicy`.
+@property (nonatomic, strong) AFSecurityPolicy *securityPolicy;
+///  Whether to log debug info. Default is NO;
+@property (nonatomic) BOOL debugLogEnabled;
+///  SessionConfiguration will be used to initialize AFHTTPSessionManager. Default is nil.
+@property (nonatomic, strong) NSURLSessionConfiguration* sessionConfiguration;
 
 @property (nonatomic, copy) YTKRequestCompletionGlobalHandleBlock globalHandleBlock;
 
+
+///  Add a new URL filter.
 - (void)addUrlFilter:(id<YTKUrlFilterProtocol>)filter;
-- (void)addCacheDirPathFilter:(id <YTKCacheDirPathFilterProtocol>)filter;
+///  Remove all URL filters.
+- (void)clearUrlFilter;
+///  Add a new cache path filter
+- (void)addCacheDirPathFilter:(id<YTKCacheDirPathFilterProtocol>)filter;
+///  Clear all cache path filters.
+- (void)clearCacheDirPathFilter;
+/// 设置全局回调
 - (void)setCompletionGlobalHandleBlock:(YTKRequestCompletionGlobalHandleBlock)block;
 
 @end
+
+NS_ASSUME_NONNULL_END
