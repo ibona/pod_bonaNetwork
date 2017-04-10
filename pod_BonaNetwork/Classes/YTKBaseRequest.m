@@ -193,6 +193,7 @@
     NSMutableArray * temps = [NSMutableArray arrayWithObjects:config.device_token,@"1",timestamp,@"24decffe391d6b206d5f800d3c189f4f", nil];
     [temps addObjectsFromArray:[parm allValues]];
     NSString * sign = [self getSignStr:temps];
+    sign = [self removeSpaceAndNewline:sign];
     [dic setObject:[[self md5:sign] uppercaseString] forKey:@"sign"];
     return dic;
 }
@@ -231,5 +232,15 @@
             result[8], result[9], result[10], result[11],
             result[12], result[13], result[14], result[15]
             ]; 
+}
+
+/**
+ 去除首尾两端的空格或者字符串
+ */
+- (NSString *)removeSpaceAndNewline:(NSString *)str
+{
+    NSString *temp = [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString *text = [temp stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    return text;
 }
 @end
