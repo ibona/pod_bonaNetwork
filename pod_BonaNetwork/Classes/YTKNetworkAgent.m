@@ -341,10 +341,7 @@
     }
 
     if (succeed) {
-        //所有接口请求后的统一处理
-        if (_config.globalHandleBlock) {
-            _config.globalHandleBlock(request);
-        }
+       
         [self requestDidSucceedWithRequest:request];
     } else {
         [self requestDidFailWithRequest:request error:requestError];
@@ -361,6 +358,10 @@
         [request requestCompletePreprocessor];
     }
     dispatch_async(dispatch_get_main_queue(), ^{
+        //所有接口请求后的统一处理
+        if (_config.globalHandleBlock) {
+            _config.globalHandleBlock(request);
+        }
         [request toggleAccessoriesWillStopCallBack];
         [request requestCompleteFilter];
 

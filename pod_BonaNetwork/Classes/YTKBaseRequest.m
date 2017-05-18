@@ -232,6 +232,7 @@ NSString *const YTKRequestValidationErrorDomain = @"com.yuantiku.request.validat
     NSMutableArray * temps = [NSMutableArray arrayWithObjects:config.device_token,@"1",timestamp,@"24decffe391d6b206d5f800d3c189f4f", nil];
     [temps addObjectsFromArray:[parm allValues]];
     NSString * sign = [self getSignStr:temps];
+    sign = [self removeSpaceAndNewline:sign];
     [dic setObject:[[self md5:sign] uppercaseString] forKey:@"sign"];
     return dic;
 }
@@ -271,5 +272,13 @@ NSString *const YTKRequestValidationErrorDomain = @"com.yuantiku.request.validat
             result[12], result[13], result[14], result[15]
             ];
 }
-
+/**
+ 去除首尾两端的空格或者空行
+ */
+- (NSString *)removeSpaceAndNewline:(NSString *)str
+{
+    NSString *temp = [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString *text = [temp stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    return text;
+}
 @end
